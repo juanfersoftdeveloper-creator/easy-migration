@@ -1,38 +1,36 @@
 // Importación de las librerías de Firebase (Módulos ES)
 import { initializeApp, setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-// Variables globales para la conexión
+// Tus credenciales reales de Firebase
+const firebaseConfig = {
+    apiKey: "TU_API_KEY_AQUI",
+    authDomain: "tu-proyecto.firebaseapp.com",
+    projectId: "tu-proyecto",
+    storageBucket: "tu-proyecto.firebasestorage.app",
+    messagingSenderId: "123456789012",
+    appId: "1:123456789012:web:e4733d5a798d8586430b60",
+    measurementId: "G-G51G1RR2PE"
+};
+
+const appId = 'easy-migration-web';
+
 let db = null;
 let auth = null;
 let userId = null;
 
-// Configuración inyectada desde el entorno
-const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : null;
-const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
-
 /**
- * Inicializa Firebase y autentica al usuario (anónimo o por token).
+ * Inicializa Firebase y autentica al usuario de forma anónima.
  */
 export async function initFirebase() {
-    if (!firebaseConfig) {
-        console.error("Error: La configuración de Firebase no está disponible.");
-        return false;
-    }
-
     try {
         const app = initializeApp(firebaseConfig);
         db = getFirestore(app);
         auth = getAuth(app);
         setLogLevel('Debug');
 
-        if (initialAuthToken) {
-            await signInWithCustomToken(auth, initialAuthToken);
-        } else {
-            await signInAnonymously(auth);
-        }
+        await signInAnonymously(auth);
         
         userId = auth.currentUser?.uid || crypto.randomUUID();
         console.log("Firebase inicializado correctamente. User ID:", userId);
@@ -55,7 +53,6 @@ export async function guardarSolicitudContacto(formData) {
 
     const collectionPath = `artifacts/${appId}/users/${userId}/contact_requests`;
     
-    // Añadimos metadatos extra antes de guardar
     const dataToSave = {
         ...formData,
         fechaSolicitud: new Date().toISOString(),
