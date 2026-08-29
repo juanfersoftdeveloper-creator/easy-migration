@@ -4,15 +4,7 @@ import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/1
 import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
 // Tus credenciales reales de Firebase
-const firebaseConfig = {
-    apiKey: "TU_API_KEY_AQUI",
-    authDomain: "tu-proyecto.firebaseapp.com",
-    projectId: "tu-proyecto",
-    storageBucket: "tu-proyecto.firebasestorage.app",
-    messagingSenderId: "123456789012",
-    appId: "1:123456789012:web:e4733d5a798d8586430b60",
-    measurementId: "G-G51G1RR2PE"
-};
+import { firebaseConfig } from './firebase-credenciales.js'; // Credenciales de Firebase
 
 const appId = 'easy-migration-web';
 
