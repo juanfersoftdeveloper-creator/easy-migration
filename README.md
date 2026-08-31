@@ -1,77 +1,191 @@
-# Easy-Migration
+# 🌍 Easy-Migration
 
-Easy-Migration es una plataforma web de servicios y asistencia para procesos de traducción legal de documentos (inglés-español) y trámites migratorios. Ofrece una interfaz amigable y segura para gestionar solicitudes de contacto y trámites migratorios.
+> Plataforma web de asistencia para procesos migratorios (EE. UU., Canadá y Colombia) y servicios de traducción de documentos.
 
-## Características principales
+![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=flat-square&logo=html5&logoColor=white)
+![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=flat-square&logo=tailwind-css&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript_ES6+-F7DF1E?style=flat-square&logo=javascript&logoColor=black)
+![Firebase](https://img.shields.io/badge/Firebase-FFCA28?style=flat-square&logo=firebase&logoColor=black)
+![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)
 
-- **Interfaz amigable**: Facilita la gestión de solicitudes de contacto y trámites migratorios.
-- **Traducción legal**: Ofrece servicios de traducción legal de documentos de inglés a español.
-- **Seguridad**: Implementa autenticación anónima y almacenamiento seguro de solicitudes de contacto mediante Firebase.
-- **Escala**: Diseñado para manejar un alto volumen de solicitudes de contacto y trámites migratorios.
+---
 
-## Tecnologías utilizadas
+## 📌 Descripción
 
-- **Frontend**: HTML5, Tailwind CSS (vía CDN), JavaScript vanilla (ES6 modules).
-- **Backend**: Firebase (Firestore Database, Autenticación anónima).
-- **Estructura del proyecto**: Organizado en un directorio `assets/` para estilos CSS y scripts JavaScript.
+**Easy-Migration** es una solución web diseñada para ofrecer orientación, asistencia paralegal y traducción de documentos legales (inglés-español) a personas interesadas en realizar trámites migratorios hacia **Estados Unidos, Canadá o Colombia**.
 
-## Estructura del proyecto
+Proporciona una interfaz moderna, rápida y responsiva que permite a los usuarios conocer los diferentes trámites disponibles y agendar consultas iniciales mediante un formulario integrado directamente con **Firebase Cloud Firestore**.
 
-El proyecto está organizado de la siguiente manera:
+---
 
-```
+## ✨ Características Principales
+
+- 📱 **Diseño Moderno y Responsivo**: Interfaz optimizada para dispositivos móviles y de escritorio mediante Tailwind CSS.
+- 🗂️ **Catálogo de Trámites Interactivo**: Navegación dinámica por pestañas para consultar los requisitos y servicios según el país de destino.
+- 📬 **Recepción de Solicitudes en Tiempo Real**: Formulario de contacto directo con almacenamiento seguro en la nube.
+- 🔐 **Autenticación Anónima**: Integración con Firebase Authentication para asegurar el acceso controlado a la base de datos Firestore.
+- ⚖️ **Enfoque Paralegal y Transparente**: Información clara sobre el alcance de los servicios de asistencia documental y traducción.
+
+---
+
+## 🌎 Servicios Ofrecidos por País
+
+### 🇺🇸 Estados Unidos (USCIS & Dept. of State)
+- Peticiones Familiares (`I-130`)
+- Ajuste de Estatus (`I-485`)
+- Asilo Afirmativo y Defensivo (`I-589`)
+- Solicitud de Permiso de Trabajo (`I-765`)
+- Acción Diferida para los Llegados en la Infancia (`DACA`)
+- Solicitud de Naturalización y Ciudadanía (`N-400`)
+
+### 🇨🇦 Canadá (IRCC)
+- Gestión y perfiles de **Express Entry**
+- Patrocinio Familiar (cónyuge, hijos, dependientes)
+- Visas de Estudio y Permisos de Trabajo
+- Visas de Visitante (Turismo y Negocios)
+- Programas de Nominación Provincial (**PNP**)
+- Procesos de Residencia Permanente
+
+### 🇨🇴 Colombia (Cancillería & Migración Colombia)
+- Visa de Residente (`Tipo R`)
+- Visa de Migrante (`Tipo M` - Cónyuge, Socios, etc.)
+- Visa de Visitante (`Tipo V` - Turismo y Negocios)
+- Permisos de Ingreso y Permanencia (`PIP`)
+- Registro de Extranjeros y Cédula de Extranjería (`CE`)
+
+---
+
+## 🛠️ Tecnologías Utilizadas
+
+| Categoría | Tecnología / Herramienta | Uso |
+| :--- | :--- | :--- |
+| **Frontend** | HTML5 Semántico | Estructura de la aplicación |
+| **Estilos** | Tailwind CSS (CDN) + CSS3 | Diseño responsivo y personalizaciones |
+| **Tipografía** | Google Fonts (Inter) | Fuente principal de la interfaz |
+| **Lógica** | JavaScript Vanilla (ES6 Modules) | Interactividad, manejo del DOM y eventos |
+| **BaaS / Backend** | Firebase JS SDK v11 (Modular) | Autenticación y base de datos NoSQL |
+| **Base de Datos** | Cloud Firestore | Almacenamiento de solicitudes de contacto |
+| **Seguridad** | Firebase Auth | Autenticación anónima para sesiones cliente |
+
+---
+
+## 📂 Estructura del Proyecto
+
+```text
 easy-migration/
 ├── assets/
 │   ├── css/
-│   │   └── custom.css
+│   │   └── custom.css                # Estilos personalizados y clases activas
+│   ├── images/                       # Recursos gráficos e imágenes
 │   └── js/
-│       ├── firebase-config.js
-│       └── main.js
-├── index.html
-└── README.md
+│       ├── firebase-config.js        # Inicialización de Firebase y funciones Firestore
+│       ├── firebase-credenciales.js  # Credenciales de Firebase (Ignorado en Git)
+│       └── main.js                   # Lógica de pestañas, validación y eventos del formulario
+├── index.html                        # Página principal (Single Page Application)
+├── .gitignore                        # Archivos y carpetas excluidos del control de versiones
+└── README.md                         # Documentación del proyecto
 ```
 
-## Instalación y ejecución local
+---
 
-Para ejecutar Easy-Migration localmente, sigue estos pasos:
+## 🚀 Instalación y Ejecución Local
 
-1. **Clona el repositorio**:
-   ```bash
-   git clone https://github.com/tu-usuario/easy-migration.git
+Dado que el proyecto utiliza **módulos de JavaScript nativos (ES6 Modules)**, es necesario ejecutarlo a través de un servidor web local para evitar restricciones de política CORS al cargar los módulos mediante `file://`.
+
+### 1. Clonar el repositorio
+```bash
+git clone https://github.com/tu-usuario/easy-migration.git
+cd easy-migration
+```
+
+### 2. Configurar las credenciales de Firebase
+Crea un archivo llamado `firebase-credenciales.js` dentro del directorio `assets/js/`:
+
+```javascript
+// assets/js/firebase-credenciales.js
+export const firebaseConfig = {
+  apiKey: "TU_API_KEY",
+  authDomain: "tu-proyecto.firebaseapp.com",
+  projectId: "tu-proyecto-id",
+  storageBucket: "tu-proyecto.appspot.com",
+  messagingSenderId: "TU_MESSAGING_SENDER_ID",
+  appId: "TU_APP_ID"
+};
+```
+
+> ⚠️ **Nota:** El archivo `firebase-credenciales.js` está incluido en `.gitignore` para proteger tus claves y configuraciones.
+
+### 3. Iniciar un servidor local
+
+Puedes utilizar cualquiera de las siguientes opciones para levantar el entorno de desarrollo:
+
+#### Opción A: Extensión Live Server (Visual Studio Code - Recomendado)
+1. Instala la extensión **Live Server** en VS Code.
+2. Abre `index.html` y haz clic en **"Go Live"** en la barra inferior.
+
+#### Opción B: Con Python 3
+```bash
+python -m http.server 8000
+```
+Abre en tu navegador: `http://localhost:8000`
+
+#### Opción C: Con Node.js (`npx serve` o `npx http-server`)
+```bash
+npx serve .
+# o
+npx http-server .
+```
+
+---
+
+## ⚙️ Configuración de Firebase
+
+Para habilitar el almacenamiento de solicitudes:
+
+1. Ve a la consola de [Firebase](https://console.firebase.google.com/) y crea un nuevo proyecto web.
+2. En la sección **Authentication > Sign-in method**, habilita el proveedor **Anónimo**.
+3. En la sección **Firestore Database**, crea una base de datos en modo producción o prueba.
+4. Ajusta las reglas de seguridad de Firestore según tus requerimientos. Ejemplo básico para usuarios autenticados:
+   ```javascript
+   rules_version = '2';
+   service cloud.firestore {
+     match /databases/{database}/documents {
+       match /artifacts/{appId}/users/{userId}/contact_requests/{document=**} {
+         allow create: if request.auth != null;
+         allow read, update, delete: if false; // Solo accesible desde panel administrativo
+       }
+     }
+   }
    ```
 
-2. **Navega al directorio del proyecto**:
+---
+
+## 🤝 Contribución
+
+Las contribuciones son bienvenidas. Si deseas colaborar:
+
+1. Realiza un **Fork** del repositorio.
+2. Crea una rama para tu funcionalidad o corrección:
    ```bash
-   cd easy-migration
+   git checkout -b feature/nueva-funcionalidad
    ```
-
-3. **Instala las dependencias**:
+3. Realiza tus cambios y haz commit:
    ```bash
-   npm install
+   git commit -m "feat: agregar soporte para nuevo formulario de contacto"
    ```
-
-4. **Inicia la aplicación**:
+4. Sube tu rama al repositorio remoto:
    ```bash
-   npm start
+   git push origin feature/nueva-funcionalidad
    ```
+5. Abre un **Pull Request**.
 
-   La aplicación estará disponible en `http://localhost:3000`.
+---
 
-## Contribución
+## 📄 Licencia y Descargo de Responsabilidad
 
-Si deseas contribuir a Easy-Migration, sigue estos pasos:
+- **Licencia:** Este proyecto se encuentra bajo la Licencia [MIT](LICENSE).
+- **Descargo de Responsabilidad:** El contenido y las herramientas de esta plataforma están orientadas a asistencia documental y preparación de formularios por paralegales certificadas. **No constituye asesoría legal de un abogado colegiado.**
 
-1. **Fork el repositorio**.
-2. **Crea una nueva rama** para tu contribución:
-   ```bash
-   git checkout -b nombre-de-tu-rama
-   ```
-3. **Realiza los cambios** y realiza un commit:
-   ```bash
-   git commit -m "Descripción de los cambios"
-   ```
-4. **Envía una solicitud de fusión (pull request)**.
+---
 
-## Licencia
-
-Easy-Migration está licenciado bajo la Licencia MIT. Consulta el archivo [LICENSE](LICENSE) para más detalles.
+Desarrollado con ❤️ para facilitar trámites migratorios claros y seguros.
