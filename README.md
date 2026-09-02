@@ -75,15 +75,17 @@ Proporciona una interfaz moderna, rápida y responsiva que permite a los usuario
 easy-migration/
 ├── assets/
 │   ├── css/
-│   │   └── custom.css                # Estilos personalizados y clases activas
-│   ├── images/                       # Recursos gráficos e imágenes
+│   │   └── custom.css                    # Estilos personalizados, botón flotante de WhatsApp
+│   ├── images/                           # Recursos gráficos e imágenes
 │   └── js/
-│       ├── firebase-config.js        # Inicialización de Firebase y funciones Firestore
-│       ├── firebase-credenciales.js  # Credenciales de Firebase (Ignorado en Git)
-│       └── main.js                   # Lógica de pestañas, validación y eventos del formulario
-├── index.html                        # Página principal (Single Page Application)
-├── .gitignore                        # Archivos y carpetas excluidos del control de versiones
-└── README.md                         # Documentación del proyecto
+│       ├── firebase-config.js            # Inicialización de Firebase y funciones Firestore
+│       ├── firebase-credenciales.js      # Credenciales reales de Firebase (Ignorado en Git)
+│       ├── firebase-credenciales.example.js # Plantilla de configuración pública
+│       ├── notifications.js              # Módulo de alertas (WhatsApp, Webhooks, EmailJS)
+│       └── main.js                       # Lógica de pestañas, validación, UI y eventos
+├── index.html                            # Página principal (Single Page Application)
+├── .gitignore                            # Archivos y carpetas excluidos del control de versiones
+└── README.md                             # Documentación del proyecto
 ```
 
 ---

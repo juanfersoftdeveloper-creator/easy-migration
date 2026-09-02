@@ -1,5 +1,6 @@
-// Importamos los servicios de Firebase desde tu archivo modularizado
+// Importamos los servicios de Firebase y el módulo de notificaciones
 import { initFirebase, guardarSolicitudContacto } from "./firebase-config.js";
+import { notificarNuevoLead, obtenerEnlaceWhatsApp } from "./notifications.js";
 
 // --- Constantes de validación ---
 const MAX_NOMBRE_LENGTH = 120;
@@ -8,6 +9,7 @@ const MAX_TELEFONO_LENGTH = 30;
 const MAX_MENSAJE_LENGTH = 2000;
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const TELEFONO_REGEX = /^[+\d\s().-]{7,30}$/;
+
 
 /**
  * Maneja el cambio de pestañas en la sección de servicios.
@@ -84,9 +86,12 @@ function validateFormData() {
     if (!telefono || !TELEFONO_REGEX.test(telefono)) {
         errors.push('Ingresa un número de teléfono válido (solo dígitos, espacios, +, -, paréntesis).');
     }
+    if (telefono.length > MAX_TELEFONO_LENGTH) {
+        errors.push(`El teléfono no puede exceder ${MAX_TELEFONO_LENGTH} caracteres.`);
+    }
 
     // --- País ---
-    const validCountries = ['USA', 'CAN', 'COL', 'OTRO'];
+    const validCountries = ['USA', 'CAN', 'COL', 'VEN', 'OTRO'];
     if (!pais || !validCountries.includes(pais)) {
         errors.push('Selecciona un país de interés válido.');
     }
@@ -189,6 +194,9 @@ async function handleFormSubmit(event) {
         // Llamamos a la función modular para guardar en Firebase
         await guardarSolicitudContacto(result.data);
 
+        // Despachar alerta de notificación al equipo (webhook/email)
+        notificarNuevoLead(result.data).catch(err => console.warn("Error en despacho de alerta:", err));
+
         // Mensaje de éxito
         showMessage(messageBox, 'success', '¡Solicitud Enviada!', 'Gracias por contactarnos. Tu información ha sido guardada con éxito.');
 
@@ -219,7 +227,13 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 });
 
 // Inicialización general de la app
-window.onload = async function() {
+window.onload = async function () {
     await initFirebase();
     initTabs();
+
+    // Sincronizar enlace del botón flotante de WhatsApp
+    const floatBtn = document.getElementById('whatsappFloatBtn');
+    if (floatBtn) {
+        floatBtn.href = obtenerEnlaceWhatsApp();
+    }
 };
