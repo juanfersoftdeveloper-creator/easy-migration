@@ -1,5 +1,5 @@
 // Importación de las librerías de Firebase (Módulos ES)
-import { initializeApp, setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
 import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
@@ -10,7 +10,17 @@ const appId = 'easy-migration-web';
 
 let db = null;
 let auth = null;
-let userId = null;
+
+/**
+ * Devuelve el UID del usuario autenticado.
+ * Lanza un error si no hay sesión activa.
+ */
+function getUserId() {
+    if (!auth || !auth.currentUser) {
+        throw new Error("No hay una sesión de usuario activa.");
+    }
+    return auth.currentUser.uid;
+}
 
 /**
  * Inicializa Firebase y autentica al usuario de forma anónima.
@@ -20,16 +30,17 @@ export async function initFirebase() {
         const app = initializeApp(firebaseConfig);
         db = getFirestore(app);
         auth = getAuth(app);
-        setLogLevel('Debug');
 
         await signInAnonymously(auth);
-        
-        userId = auth.currentUser?.uid || crypto.randomUUID();
-        console.log("Firebase inicializado correctamente. User ID:", userId);
+
+        if (!auth.currentUser) {
+            throw new Error("La autenticación anónima no generó una sesión válida.");
+        }
+
         return true;
 
     } catch (error) {
-        console.error("Error al inicializar Firebase:", error);
+        console.error("Error al inicializar Firebase:", error.message);
         return false;
     }
 }
@@ -39,12 +50,13 @@ export async function initFirebase() {
  * @param {Object} formData - Los datos del formulario del cliente.
  */
 export async function guardarSolicitudContacto(formData) {
-    if (!db || !userId) {
+    if (!db) {
         throw new Error("La base de datos no está inicializada.");
     }
 
+    const userId = getUserId();
     const collectionPath = `artifacts/${appId}/users/${userId}/contact_requests`;
-    
+
     const dataToSave = {
         ...formData,
         fechaSolicitud: new Date().toISOString(),

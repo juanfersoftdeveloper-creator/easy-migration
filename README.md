@@ -145,14 +145,23 @@ Para habilitar el almacenamiento de solicitudes:
 1. Ve a la consola de [Firebase](https://console.firebase.google.com/) y crea un nuevo proyecto web.
 2. En la sección **Authentication > Sign-in method**, habilita el proveedor **Anónimo**.
 3. En la sección **Firestore Database**, crea una base de datos en modo producción o prueba.
-4. Ajusta las reglas de seguridad de Firestore según tus requerimientos. Ejemplo básico para usuarios autenticados:
+4. Ajusta las reglas de seguridad de Firestore según tus requerimientos. Las reglas actuales del proyecto:
    ```javascript
    rules_version = '2';
    service cloud.firestore {
      match /databases/{database}/documents {
-       match /artifacts/{appId}/users/{userId}/contact_requests/{document=**} {
-         allow create: if request.auth != null;
-         allow read, update, delete: if false; // Solo accesible desde panel administrativo
+       match /artifacts/{appId}/users/{userId}/contact_requests/{requestId} {
+         
+         // Permitir crear solo en su propio UID y validando campos obligatorios
+         allow create: if request.auth != null 
+                       && request.auth.uid == userId
+                       && request.resource.data.nombre is string
+                       && request.resource.data.email is string
+                       && request.resource.data.telefono is string
+                       && request.resource.data.mensaje.size() <= 2000;
+
+         // No permitir lectura, modificación ni borrado desde la web pública
+         allow read, update, delete: if false;
        }
      }
    }

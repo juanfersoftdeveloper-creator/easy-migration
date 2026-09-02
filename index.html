@@ -4,9 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Easy Migration | Asistencia en Procesos Migratorios</title>
+    <!-- Cabeceras de Seguridad -->
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
     <!-- Carga de Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" crossorigin="anonymous">
     <!-- Estilos personalizados -->
     <link rel="stylesheet" href="assets/css/custom.css">
 </head>
@@ -97,13 +101,13 @@
             
             <!-- Contenedor de Pestañas/Botones -->
             <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4 mb-8">
-                <button onclick="showTab('usa')" class="tab-button px-6 py-2 rounded-full font-semibold border border-gray-300 transition duration-200 text-primary bg-white hover:bg-gray-100">
+                <button data-country="usa" class="tab-button px-6 py-2 rounded-full font-semibold border border-gray-300 transition duration-200 text-primary bg-white hover:bg-gray-100">
                     <span class="inline-block mr-2">🇺🇸</span> EE. UU.
                 </button>
-                <button onclick="showTab('can')" class="tab-button px-6 py-2 rounded-full font-semibold border border-gray-300 transition duration-200 text-primary bg-white hover:bg-gray-100">
+                <button data-country="can" class="tab-button px-6 py-2 rounded-full font-semibold border border-gray-300 transition duration-200 text-primary bg-white hover:bg-gray-100">
                     <span class="inline-block mr-2">🇨🇦</span> Canadá
                 </button>
-                <button onclick="showTab('col')" class="tab-button px-6 py-2 rounded-full font-semibold border border-gray-300 transition duration-200 text-primary bg-white hover:bg-gray-100">
+                <button data-country="col" class="tab-button px-6 py-2 rounded-full font-semibold border border-gray-300 transition duration-200 text-primary bg-white hover:bg-gray-100">
                     <span class="inline-block mr-2">🇨🇴</span> Colombia
                 </button>
             </div>
@@ -184,21 +188,27 @@
             
             <div class="max-w-2xl mx-auto bg-gray-50 p-8 rounded-xl shadow-2xl border-t-4 border-primary">
                 <form id="contactForm">
+                    <!-- Honeypot anti-spam (oculto para usuarios reales, visible para bots) -->
+                    <div aria-hidden="true" style="position:absolute;left:-9999px;top:-9999px;height:0;width:0;overflow:hidden;">
+                        <label for="website_url">No completar este campo</label>
+                        <input type="text" id="website_url" name="website_url" tabindex="-1" autocomplete="off">
+                    </div>
+
                     <div class="mb-4">
                         <label for="nombre" class="block text-gray-700 font-semibold mb-2">Nombre Completo</label>
-                        <input type="text" id="nombre" name="nombre" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary" required>
+                        <input type="text" id="nombre" name="nombre" autocomplete="name" maxlength="120" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary" required>
                     </div>
                     <div class="mb-4">
                         <label for="email" class="block text-gray-700 font-semibold mb-2">Correo Electrónico</label>
-                        <input type="email" id="email" name="email" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary" required>
+                        <input type="email" id="email" name="email" autocomplete="email" maxlength="254" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary" required>
                     </div>
                     <div class="mb-4">
                         <label for="telefono" class="block text-gray-700 font-semibold mb-2">Teléfono / WhatsApp</label>
-                        <input type="tel" id="telefono" name="telefono" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary" required>
+                        <input type="tel" id="telefono" name="telefono" autocomplete="tel" maxlength="30" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary" required>
                     </div>
                     <div class="mb-4">
                         <label for="pais" class="block text-gray-700 font-semibold mb-2">País de Interés (EE. UU., Canadá, Colombia)</label>
-                        <select id="pais" name="pais" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary" required>
+                        <select id="pais" name="pais" autocomplete="country" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary" required>
                             <option value="">Selecciona un país</option>
                             <option value="USA">Estados Unidos (EE. UU.)</option>
                             <option value="CAN">Canadá</option>
@@ -208,7 +218,7 @@
                     </div>
                     <div class="mb-6">
                         <label for="mensaje" class="block text-gray-700 font-semibold mb-2">Breve descripción de tu caso</label>
-                        <textarea id="mensaje" name="mensaje" rows="4" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary" required></textarea>
+                        <textarea id="mensaje" name="mensaje" rows="4" maxlength="2000" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary" required></textarea>
                     </div>
                     
                     <button type="submit" class="w-full btn-primary text-white font-bold py-3 rounded-lg text-lg shadow-md hover:shadow-xl transition duration-300">
@@ -226,7 +236,7 @@
                 <p>Teléfono: <span class="text-primary font-medium">(+1) XXX-XXX-XXXX</span></p>
                 <p>Email: <span class="text-primary font-medium">info@easymigration.com</span></p>
                 <div class="flex justify-center space-x-4 mt-4">
-                    <a href="https://tiktok.com/@easymigration08" target="_blank" class="text-gray-500 hover:text-primary transition duration-200">
+                    <a href="https://tiktok.com/@easymigration08" target="_blank" rel="noopener noreferrer" class="text-gray-500 hover:text-primary transition duration-200">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12.444 0a1 1 0 0 0-.256.027A10.151 10.151 0 0 0 0 10.125v3.75A10.151 10.151 0 0 0 10.125 24h3.75A10.151 10.151 0 0 0 24 13.875v-3.75a10.151 10.151 0 0 0-10.125-10.15A1 1 0 0 0 12.444 0ZM8.995 18.062a.75.75 0 0 1-.75-.75V8.953a.75.75 0 0 1 .75-.75h2.25a.75.75 0 0 1 .75.75v8.359a.75.75 0 0 1-.75.75h-2.25ZM16.2 18.062a.75.75 0 0 1-.75-.75V8.953a.75.75 0 0 1 .75-.75h2.25a.75.75 0 0 1 .75.75v8.359a.75.75 0 0 1-.75.75H16.2ZM12.9 8.953h2.25a.75.75 0 0 1 0 1.5h-2.25a.75.75 0 0 1 0-1.5ZM8.995 8.953a.75.75 0 0 1 0-1.5h2.25a.75.75 0 0 1 0 1.5h-2.25Z"/></svg>
                     </a>
                 </div>
