@@ -140,34 +140,51 @@ npx http-server .
 
 ---
 
-## ⚙️ Configuración de Firebase
+## ⚙️ Configuración de Firebase y Seguridad
 
-Para habilitar el almacenamiento de solicitudes:
+Para habilitar el almacenamiento seguro de solicitudes:
 
 1. Ve a la consola de [Firebase](https://console.firebase.google.com/) y crea un nuevo proyecto web.
 2. En la sección **Authentication > Sign-in method**, habilita el proveedor **Anónimo**.
-3. En la sección **Firestore Database**, crea una base de datos en modo producción o prueba.
-4. Ajusta las reglas de seguridad de Firestore según tus requerimientos. Las reglas actuales del proyecto:
+3. En la sección **Firestore Database**, crea la base de datos y copia las reglas de seguridad desde el archivo [`firestore.rules`](firestore.rules):
    ```javascript
    rules_version = '2';
    service cloud.firestore {
      match /databases/{database}/documents {
        match /artifacts/{appId}/users/{userId}/contact_requests/{requestId} {
          
-         // Permitir crear solo en su propio UID y validando campos obligatorios
+         // Permitir crear solo en su propio UID y validando campos obligatorios estrictos
          allow create: if request.auth != null 
                        && request.auth.uid == userId
-                       && request.resource.data.nombre is string
-                       && request.resource.data.email is string
-                       && request.resource.data.telefono is string
-                       && request.resource.data.mensaje.size() <= 2000;
+                       && request.resource.data.keys().hasOnly([
+                         'nombre', 'email', 'telefono', 'paisInteres', 
+                         'mensaje', 'consentimiento', 'fechaSolicitud', 'estado'
+                       ])
+                       && request.resource.data.nombre is string 
+                       && request.resource.data.nombre.size() >= 2 && request.resource.data.nombre.size() <= 120
+                       && request.resource.data.email is string 
+                       && request.resource.data.email.size() >= 5 && request.resource.data.email.size() <= 254
+                       && request.resource.data.telefono is string 
+                       && request.resource.data.telefono.size() >= 7 && request.resource.data.telefono.size() <= 30
+                       && request.resource.data.mensaje is string 
+                       && request.resource.data.mensaje.size() >= 10 && request.resource.data.mensaje.size() <= 2000
+                       && request.resource.data.paisInteres in ['USA', 'CAN', 'COL', 'VEN', 'OTRO']
+                       && request.resource.data.consentimiento == true
+                       && request.resource.data.estado == 'Pendiente'
+                       && request.resource.data.fechaSolicitud is string;
 
          // No permitir lectura, modificación ni borrado desde la web pública
          allow read, update, delete: if false;
        }
+
+       match /{document=**} {
+         allow read, write: if false;
+       }
      }
    }
    ```
+4. **Protección Anti-Bots (Opcional pero recomendado):** En **App Check**, registra tu aplicación con reCAPTCHA v3 e ingresa tu Site Key en `firebase-credenciales.js`.
+5. **Cabeceras HTTP de Seguridad:** El proyecto incluye `.htaccess` (para Apache / XAMPP) y `firebase.json` (para Firebase Hosting) con directivas de `Content-Security-Policy`, `X-Frame-Options`, `X-Content-Type-Options` y `Referrer-Policy`.
 
 ---
 

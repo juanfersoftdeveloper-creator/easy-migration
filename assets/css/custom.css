@@ -31,44 +31,41 @@ body {
     right: 24px;
     z-index: 50;
     background-color: #25d366;
-    color: white;
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    display: flex;
+    color: #ffffff;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 4px 14px rgba(37, 211, 102, 0.4);
-    transition: all 0.3s ease;
+    gap: 10px;
+    padding: 12px 20px;
+    border-radius: 9999px;
+    box-shadow: 0 4px 18px rgba(37, 211, 102, 0.45);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     text-decoration: none;
 }
 
 .whatsapp-float:hover {
     background-color: #20ba5a;
-    transform: scale(1.08);
-    box-shadow: 0 6px 20px rgba(37, 211, 102, 0.6);
+    transform: translateY(-2px) scale(1.03);
+    box-shadow: 0 8px 25px rgba(37, 211, 102, 0.6);
+    color: #ffffff;
 }
 
-.whatsapp-float .tooltip {
-    visibility: hidden;
-    opacity: 0;
-    position: absolute;
-    right: 70px;
-    background-color: #1f2937;
-    color: white;
-    font-size: 0.875rem;
-    font-weight: 500;
-    padding: 6px 12px;
-    border-radius: 8px;
+.whatsapp-float .whatsapp-text {
+    font-size: 0.925rem;
+    font-weight: 600;
     white-space: nowrap;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-    transition: opacity 0.3s ease, visibility 0.3s ease;
-    pointer-events: none;
+    letter-spacing: 0.01em;
 }
 
-.whatsapp-float:hover .tooltip {
-    visibility: visible;
-    opacity: 1;
+@media (max-width: 639px) {
+    .whatsapp-float {
+        bottom: 20px;
+        right: 20px;
+        width: 54px;
+        height: 54px;
+        padding: 0;
+        border-radius: 50%;
+    }
 }
 
 /* Animación de pulso suave */

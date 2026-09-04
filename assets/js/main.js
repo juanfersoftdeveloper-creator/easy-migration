@@ -104,6 +104,12 @@ function validateFormData() {
         errors.push(`La descripción no puede exceder ${MAX_MENSAJE_LENGTH} caracteres.`);
     }
 
+    // --- Consentimiento de Tratamiento de Datos ---
+    const consentimiento = document.getElementById('consentimiento');
+    if (!consentimiento || !consentimiento.checked) {
+        errors.push('Debes autorizar el tratamiento de datos personales para continuar.');
+    }
+
     if (errors.length > 0) {
         return { errors };
     }
@@ -114,7 +120,8 @@ function validateFormData() {
             email,
             telefono,
             paisInteres: pais,
-            mensaje
+            mensaje,
+            consentimiento: true
         }
     };
 }

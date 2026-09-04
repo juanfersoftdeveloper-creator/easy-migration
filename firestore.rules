@@ -1,0 +1,54 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Reglas para la colección de solicitudes de contacto de Easy-Migration
+    match /artifacts/{appId}/users/{userId}/contact_requests/{requestId} {
+      
+      // Permitir creación únicamente si el usuario está autenticado (incluye anónimo),
+      // coincide con su propio UID y los datos cumplen con el esquema exacto y seguro.
+      allow create: if request.auth != null 
+                    && request.auth.uid == userId
+                    // Validar que solo contenga los campos autorizados (whitelist de campos)
+                    && request.resource.data.keys().hasOnly([
+                      'nombre', 
+                      'email', 
+                      'telefono', 
+                      'paisInteres', 
+                      'mensaje', 
+                      'consentimiento', 
+                      'fechaSolicitud', 
+                      'estado'
+                    ])
+                    // Validar tipos y longitudes de datos
+                    && request.resource.data.nombre is string 
+                    && request.resource.data.nombre.size() >= 2 
+                    && request.resource.data.nombre.size() <= 120
+                    && request.resource.data.email is string 
+                    && request.resource.data.email.size() >= 5 
+                    && request.resource.data.email.size() <= 254
+                    && request.resource.data.telefono is string 
+                    && request.resource.data.telefono.size() >= 7 
+                    && request.resource.data.telefono.size() <= 30
+                    && request.resource.data.mensaje is string 
+                    && request.resource.data.mensaje.size() >= 10 
+                    && request.resource.data.mensaje.size() <= 2000
+                    // Validar lista de países permitidos
+                    && request.resource.data.paisInteres in ['USA', 'CAN', 'COL', 'VEN', 'OTRO']
+                    // Validar aceptación obligatoria de consentimiento
+                    && request.resource.data.consentimiento == true
+                    // Validar estado inicial inmutable en creación
+                    && request.resource.data.estado == 'Pendiente'
+                    && request.resource.data.fechaSolicitud is string;
+
+      // Prohibir terminantemente la lectura, actualización o borrado desde el cliente web público
+      allow read, update, delete: if false;
+    }
+    
+    // Denegar cualquier otro acceso no especificado por defecto
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

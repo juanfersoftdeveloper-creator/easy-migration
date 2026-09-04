@@ -1,18 +1,24 @@
 /**
  * Módulo de Notificaciones para Easy-Migration
- * Permite alertar al equipo cuando se recibe un nuevo lead en el formulario.
+ * 
+ * NOTA DE SEGURIDAD:
+ * Para entornos de producción con alta confidencialidad, la forma recomendada y segura
+ * de despachar notificaciones es a través de una Cloud Function en Firebase (trigger onCreate
+ * en Firestore) para no exponer URLs de webhooks o llaves privadas en el código frontend.
  */
 
-// Configuración opcional de canales de notificación externa
 export const notificationConfig = {
-    // Si deseas recibir alertas en Discord/Telegram/Slack/Make/Zapier, ingresa la URL de webhook aquí
+    /**
+     * ADVERTENCIA DE SEGURIDAD: Cualquier URL de webhook ingresada aquí será visible en el código del navegador.
+     * Úsalo únicamente con webhooks que cuenten con rate limiting o proxies intermedios.
+     */
     webhookUrl: '',
     
-    // Configuración de EmailJS (si deseas recibir correos automáticos sin backend propio)
+    // Configuración de EmailJS (si se utiliza servicio de correo cliente)
     emailJs: {
-        publicKey: '',     // Tu Public Key de EmailJS
-        serviceId: '',     // ID del servicio de correo (ej. 'service_xxxx')
-        templateId: ''     // ID de la plantilla de correo (ej. 'template_xxxx')
+        publicKey: '',
+        serviceId: '',
+        templateId: ''
     },
 
     // Número de WhatsApp oficial para atención directa (código de país + número, sin + ni espacios)
@@ -28,7 +34,8 @@ export function obtenerEnlaceWhatsApp(leadData = null) {
     let mensaje = "¡Hola Easy Migration! Deseo recibir información y asesoría sobre sus servicios de asistencia migratoria y traducción legal.";
 
     if (leadData && leadData.nombre) {
-        mensaje = `¡Hola! Mi nombre es ${leadData.nombre}. Acabo de solicitar una cita en su página web sobre trámites para ${leadData.paisInteres || 'migración'}.`;
+        mensaje = `¡Hola! Mi nombre es ${encodeURIComponent(leadData.nombre)}. Acabo de solicitar una cita en su página web sobre trámites para ${encodeURIComponent(leadData.paisInteres || 'migración')}.`;
+        return `https://wa.me/${notificationConfig.whatsappNumber}?text=${mensaje}`;
     }
 
     return `https://wa.me/${notificationConfig.whatsappNumber}?text=${encodeURIComponent(mensaje)}`;
@@ -43,7 +50,7 @@ export async function notificarNuevoLead(leadData) {
     const tareasNotificacion = [];
 
     // 1. Notificación vía Webhook (Discord, Telegram, Slack, Zapier, etc.) si está configurado
-    if (notificationConfig.webhookUrl) {
+    if (notificationConfig.webhookUrl && typeof notificationConfig.webhookUrl === 'string' && notificationConfig.webhookUrl.startsWith('https://')) {
         tareasNotificacion.push(
             fetch(notificationConfig.webhookUrl, {
                 method: 'POST',

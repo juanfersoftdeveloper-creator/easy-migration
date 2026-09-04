@@ -7,5 +7,7 @@ export const firebaseConfig = {
     storageBucket: "tu-proyecto.firebasestorage.app",
     messagingSenderId: "123456789012",
     appId: "1:123456789012:web:abcdef123456",
-    measurementId: "G-XXXXXXXXXX"
+    measurementId: "G-XXXXXXXXXX",
+    // Opcional: Clave de sitio de Google reCAPTCHA v3 para Firebase App Check (protección anti-bots)
+    recaptchaSiteKey: ""
 };
